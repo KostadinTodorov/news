@@ -2,6 +2,7 @@ package bg.tuvarna.sit.newsblog.service.implement;
 
 import bg.tuvarna.sit.newsblog.dto.CategoryDto;
 import bg.tuvarna.sit.newsblog.entity.Category;
+import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category update(Long id, CategoryDto dto) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "ID "+id));
+                //.orElseThrow(() -> new RuntimeException("Category not found"));
 
         category.setName(dto.getName());
         return categoryRepository.save(category);

@@ -24,6 +24,11 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/auth/login",
+            "/api/auth/register"
+    };
+
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
 
@@ -33,7 +38,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // login/register
+                        .requestMatchers(AUTH_WHITELIST).permitAll() // login/register
                         .requestMatchers("/api/news/**").permitAll() // public news access
                         .anyRequest().authenticated()
                 )

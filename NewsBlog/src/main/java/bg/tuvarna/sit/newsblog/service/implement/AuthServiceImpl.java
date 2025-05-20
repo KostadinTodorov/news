@@ -3,6 +3,7 @@ package bg.tuvarna.sit.newsblog.service.implement;
 import bg.tuvarna.sit.newsblog.dto.LoginDto;
 import bg.tuvarna.sit.newsblog.dto.RegisterDto;
 import bg.tuvarna.sit.newsblog.entity.User;
+import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.repository.RoleRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
 import bg.tuvarna.sit.newsblog.security.JwtService;
@@ -37,7 +38,8 @@ public class AuthServiceImpl implements AuthService {
         );
 
         User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("User", "name "+loginDto.getUsername()));
+                //.orElseThrow(() -> new RuntimeException("User not found"));
 
         return jwtService.generateToken(user);
     }
@@ -53,7 +55,8 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(registerDto.getPassword()))
                 .displayName(registerDto.getDisplayName())
                 .roles(Set.of(roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Role not found"))))
+                .orElseThrow(()-> new ResourceNotFoundException("Role", "ROLE_USER"))))
+                //.orElseThrow(() -> new RuntimeException("Role not found"))))
                 .build();
 
         userRepository.save(user);

@@ -4,6 +4,7 @@ import bg.tuvarna.sit.newsblog.dto.CommentUpdateCreationDto;
 import bg.tuvarna.sit.newsblog.entity.Comment;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.entity.User;
+import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.repository.CommentRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
@@ -24,10 +25,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment createComment(CommentUpdateCreationDto dto, String username, Long newsId) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                //.orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("User", "name "+username));
 
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("News", "id "+newsId));
+                //.orElseThrow(() -> new RuntimeException("News not found"));
 
         Comment comment = Comment.builder()
                 .title(dto.getTitle())
@@ -43,7 +46,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment updateComment(Long id, CommentUpdateCreationDto dto, String username) {
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Comment", "id "+id));
+                //.orElseThrow(() -> new RuntimeException("Comment not found"));
 
         if (!comment.getAuthor().getUsername().equals(username)) {
             throw new RuntimeException("You are not allowed to edit this comment");

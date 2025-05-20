@@ -2,6 +2,7 @@ package bg.tuvarna.sit.newsblog.service.implement;
 
 import bg.tuvarna.sit.newsblog.entity.Role;
 import bg.tuvarna.sit.newsblog.entity.User;
+import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.repository.RoleRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.UserService;
@@ -31,7 +32,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(()-> new ResourceNotFoundException("User", "id "+username));
+                //.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }
 

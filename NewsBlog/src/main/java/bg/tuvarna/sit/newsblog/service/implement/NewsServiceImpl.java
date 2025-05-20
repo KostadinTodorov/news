@@ -4,6 +4,7 @@ import bg.tuvarna.sit.newsblog.dto.NewsUpdateCreationDto;
 import bg.tuvarna.sit.newsblog.entity.Category;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.entity.User;
+import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.NewsService;
@@ -42,7 +43,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public News updateNews(Long id, NewsUpdateCreationDto dto) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("News", "id "+id));
+                //.orElseThrow(() -> new RuntimeException("News not found"));
 
         news.setTitle(dto.getTitle());
         news.setContent(dto.getContent());
