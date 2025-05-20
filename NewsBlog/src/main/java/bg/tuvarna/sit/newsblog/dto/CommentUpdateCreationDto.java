@@ -1,0 +1,17 @@
+package bg.tuvarna.sit.newsblog.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentUpdateCreationDto {
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String content;
+}
