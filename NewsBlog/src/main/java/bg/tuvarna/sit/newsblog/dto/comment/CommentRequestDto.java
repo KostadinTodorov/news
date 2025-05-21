@@ -1,25 +1,17 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.comment;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
-    private Long id;
-
+public class CommentRequestDto {
     @NotBlank
     private String title;
 
     @NotBlank
     private String content;
-
-    private String authorUsername;
-
-    private LocalDateTime createdAt;
 }

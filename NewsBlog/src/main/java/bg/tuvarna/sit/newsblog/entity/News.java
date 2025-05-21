@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder
+@Builder
 
 @Entity
 @Table(name = "news")
@@ -27,9 +29,8 @@ public class News {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+    @Column(nullable = false)
+    private String author;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -44,5 +45,8 @@ public class News {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 }
 

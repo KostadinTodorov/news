@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder
+@Builder
 
 @Entity
 @Table(name = "categories")
@@ -23,6 +23,6 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "category")
     private Set<News> news = new HashSet<>();
 }

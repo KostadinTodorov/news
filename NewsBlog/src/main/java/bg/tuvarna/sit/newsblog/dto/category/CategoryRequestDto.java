@@ -1,5 +1,6 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.category;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDto {
-    private Long id;
+public class CategoryRequestDto {
+    @NotBlank
     private String name;
 }

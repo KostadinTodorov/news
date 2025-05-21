@@ -1,6 +1,7 @@
 package bg.tuvarna.sit.newsblog.service.interfaces;
 
-import bg.tuvarna.sit.newsblog.dto.NewsUpdateCreationDto;
+import bg.tuvarna.sit.newsblog.dto.news.NewsRequestDto;
+import bg.tuvarna.sit.newsblog.dto.news.NewsResponseDto;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.entity.User;
 
@@ -8,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NewsService {
-    News createNews(NewsUpdateCreationDto dto, User author);
-    News updateNews(Long id, NewsUpdateCreationDto dto);
+    News createNews(NewsRequestDto dto, User author);
+    News updateNews(Long id, NewsRequestDto dto);
     void deleteNews(Long id);
-    List<News> findAll();
-    Optional<News> findById(Long id);
+    List<NewsResponseDto> findAll();
+    NewsResponseDto findById(Long id);
 }

@@ -25,6 +25,9 @@ public class Comment {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id",nullable = false)
     private User author;
@@ -32,7 +35,4 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "news_id", nullable = false)
     private News news;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 }

@@ -1,8 +1,10 @@
 package bg.tuvarna.sit.newsblog.service.implement;
 
-import bg.tuvarna.sit.newsblog.dto.CategoryDto;
+import bg.tuvarna.sit.newsblog.dto.category.CategoryRequestDto;
+import bg.tuvarna.sit.newsblog.dto.category.CategoryResponseDto;
 import bg.tuvarna.sit.newsblog.entity.Category;
 import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
+import bg.tuvarna.sit.newsblog.mapper.CategoryMapper;
 import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -14,32 +16,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
-    }
-
-    @Override
-    public Category create(CategoryDto dto) {
+    public CategoryResponseDto create(CategoryRequestDto dto) {
         if (categoryRepository.existsByName(dto.getName())) {
             throw new RuntimeException("Category already exists");
         }
-
-        Category category = new Category();
-        category.setName(dto.getName());
-
-        return categoryRepository.save(category);
+        else {
+            Category category = categoryMapper.toEntity(dto);
+            categoryRepository.save(category);
+            return categoryMapper.toDto(category);
+        }
     }
 
     @Override
-    public Category update(Long id, CategoryDto dto) {
+    public CategoryResponseDto update(Long id, CategoryRequestDto dto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "ID "+id));
-                //.orElseThrow(() -> new RuntimeException("Category not found"));
 
         category.setName(dto.getName());
-        return categoryRepository.save(category);
+        categoryRepository.save(category);
+        return categoryMapper.toDto(category);
     }
 
     @Override

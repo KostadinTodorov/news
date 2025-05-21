@@ -1,4 +1,4 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

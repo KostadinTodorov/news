@@ -1,6 +1,8 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.auth;
 
+import bg.tuvarna.sit.newsblog.entity.RoleName;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +19,8 @@ public class RegisterDto {
 
     @NotBlank
     private String displayName;
+
+    @NotNull
+    private RoleName role;
 }
 

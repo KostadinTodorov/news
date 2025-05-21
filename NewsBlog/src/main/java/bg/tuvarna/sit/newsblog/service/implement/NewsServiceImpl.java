@@ -1,6 +1,7 @@
 package bg.tuvarna.sit.newsblog.service.implement;
 
-import bg.tuvarna.sit.newsblog.dto.NewsUpdateCreationDto;
+import bg.tuvarna.sit.newsblog.dto.news.NewsRequestDto;
+import bg.tuvarna.sit.newsblog.dto.news.NewsResponseDto;
 import bg.tuvarna.sit.newsblog.entity.Category;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.entity.User;
@@ -9,6 +10,7 @@ import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.NewsService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,9 +24,10 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
     private final CategoryRepository categoryRepository;
+    private ModelMapper mapper;
 
     @Override
-    public News createNews(NewsUpdateCreationDto dto, User author) {
+    public News createNews(NewsRequestDto dto, User author) {
         Set<Category> categories = categoryRepository.findAllById(dto.getCategoryIds())
                 .stream().collect(Collectors.toSet());
 
@@ -41,7 +44,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public News updateNews(Long id, NewsUpdateCreationDto dto) {
+    public News updateNews(Long id, NewsRequestDto dto) {
         News news = newsRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("News", "id "+id));
                 //.orElseThrow(() -> new RuntimeException("News not found"));
@@ -63,13 +66,20 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> findAll() {
-        return newsRepository.findAll();
+    public List<NewsResponseDto> findAll() {
+        return newsRepository.findAll().stream()
+                .map(news -> mapToDto(news))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<News> findById(Long id) {
-        return newsRepository.findById(id);
+    public NewsResponseDto findById(Long id) {
+        Optional<News> news = newsRepository.findById(id);
+        return mapToDto(news.orElse(null));
+    }
+
+    private NewsResponseDto mapToDto(News news) {
+        return mapper.map(news, NewsResponseDto.class);
     }
 }
 

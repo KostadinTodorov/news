@@ -1,5 +1,6 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.auth;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginDto {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
 }
 

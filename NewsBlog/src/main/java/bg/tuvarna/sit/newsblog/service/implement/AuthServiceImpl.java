@@ -1,9 +1,12 @@
 package bg.tuvarna.sit.newsblog.service.implement;
 
-import bg.tuvarna.sit.newsblog.dto.LoginDto;
-import bg.tuvarna.sit.newsblog.dto.RegisterDto;
+import bg.tuvarna.sit.newsblog.dto.auth.JwtAuthResponseDto;
+import bg.tuvarna.sit.newsblog.dto.auth.LoginDto;
+import bg.tuvarna.sit.newsblog.dto.auth.RegisterDto;
+import bg.tuvarna.sit.newsblog.entity.Role;
 import bg.tuvarna.sit.newsblog.entity.User;
 import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
+import bg.tuvarna.sit.newsblog.mapper.UserMapper;
 import bg.tuvarna.sit.newsblog.repository.RoleRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
 import bg.tuvarna.sit.newsblog.security.JwtService;
@@ -29,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     @Override
     public String login(HttpServletRequest req, LoginDto loginDto) {
@@ -39,7 +43,6 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(()-> new ResourceNotFoundException("User", "name "+loginDto.getUsername()));
-                //.orElseThrow(() -> new RuntimeException("User not found"));
 
         return jwtService.generateToken(user);
     }
@@ -49,18 +52,18 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
+        else{
+            Role userRole = roleRepository.findByName("COMMENTATOR")
+                    .orElseThrow(()-> new ResourceNotFoundException("Role", "COMMENTATOR"));
 
-        User user = User.builder()
-                .username(registerDto.getUsername())
-                .password(passwordEncoder.encode(registerDto.getPassword()))
-                .displayName(registerDto.getDisplayName())
-                .roles(Set.of(roleRepository.findByName("ROLE_USER")
-                .orElseThrow(()-> new ResourceNotFoundException("Role", "ROLE_USER"))))
-                //.orElseThrow(() -> new RuntimeException("Role not found"))))
-                .build();
+            User user = userMapper.toEntity(registerDto);
+            user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+            user.setRole(userRole);
 
-        userRepository.save(user);
-        return "User registered successfully!";
+            userRepository.save(user);
+
+            return jwtService.generateToken(user);
+        }
     }
 
     @Override

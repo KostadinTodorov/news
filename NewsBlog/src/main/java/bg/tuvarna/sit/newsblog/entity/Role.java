@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,10 +23,11 @@ public class Role implements GrantedAuthority, Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private String name;
+    private RoleName name;
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role")
     private Set<User> users = new HashSet<>();
 
 

@@ -1,7 +1,8 @@
 package bg.tuvarna.sit.newsblog.service.interfaces;
 
-import bg.tuvarna.sit.newsblog.dto.LoginDto;
-import bg.tuvarna.sit.newsblog.dto.RegisterDto;
+import bg.tuvarna.sit.newsblog.dto.auth.JwtAuthResponseDto;
+import bg.tuvarna.sit.newsblog.dto.auth.LoginDto;
+import bg.tuvarna.sit.newsblog.dto.auth.RegisterDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface AuthService {

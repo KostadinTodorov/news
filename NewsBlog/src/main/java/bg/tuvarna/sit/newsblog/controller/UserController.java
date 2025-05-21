@@ -1,6 +1,6 @@
 package bg.tuvarna.sit.newsblog.controller;
 
-import bg.tuvarna.sit.newsblog.dto.UserDto;
+import bg.tuvarna.sit.newsblog.dto.user.UserSummaryDto;
 import bg.tuvarna.sit.newsblog.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/newsblog")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public ResponseEntity<List<UserSummaryDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserSummaryDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 }

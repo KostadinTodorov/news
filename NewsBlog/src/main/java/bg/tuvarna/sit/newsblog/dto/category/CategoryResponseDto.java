@@ -1,4 +1,4 @@
-package bg.tuvarna.sit.newsblog.dto;
+package bg.tuvarna.sit.newsblog.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentUpdateCreationDto {
-    @NotBlank
-    private String title;
+public class CategoryResponseDto {
 
     @NotBlank
-    private String content;
+    private Long id;
+
+    @NotBlank
+    private String name;
 }
