@@ -6,6 +6,7 @@ import bg.tuvarna.sit.newsblog.entity.Category;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.entity.User;
 import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
+import bg.tuvarna.sit.newsblog.mapper.NewsMapper;
 import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.NewsService;
@@ -24,62 +25,61 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
     private final CategoryRepository categoryRepository;
-    private ModelMapper mapper;
+    private final NewsServiceImpl userRepository;
+    private final NewsMapper newsMapper;
 
     @Override
-    public News createNews(NewsRequestDto dto, User author) {
-        Set<Category> categories = categoryRepository.findAllById(dto.getCategoryIds())
-                .stream().collect(Collectors.toSet());
+    public NewsResponseDto createNews(Long categoryId, NewsRequestDto dto) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id "+categoryId));
 
-        News news = News.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .author(author)
-                .categories(categories)
-                .createdAt(LocalDateTime.now())
-                .lastModifiedAt(LocalDateTime.now())
-                .build();
+        News news = newsMapper.toEntity(dto);
+        news.setAuthor(dto.getAuthor());
+        news.setCreatedAt(LocalDateTime.now());
+        news.setCategories(Set.of(category));
 
-        return newsRepository.save(news);
+        newsRepository.save(news);
+
+        return newsMapper.toDto(news);
     }
 
     @Override
-    public News updateNews(Long id, NewsRequestDto dto) {
+    public NewsResponseDto updateNews(Long id, NewsRequestDto dto) {
         News news = newsRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("News", "id "+id));
-                //.orElseThrow(() -> new RuntimeException("News not found"));
 
+
+        Set<Category> categories = categoryRepository.findAllById(dto.getCategoryIds())
+                .stream().collect(Collectors.toSet());
+
+        news.setCategories(categories);
         news.setTitle(dto.getTitle());
         news.setContent(dto.getContent());
         news.setLastModifiedAt(LocalDateTime.now());
 
-        Set<Category> categories = categoryRepository.findAllById(dto.getCategoryIds())
-                .stream().collect(Collectors.toSet());
-        news.setCategories(categories);
 
-        return newsRepository.save(news);
+        return newsMapper.toDto(newsRepository.save(news));
     }
 
     @Override
     public void deleteNews(Long id) {
+        if (!newsRepository.existsById(id)) {
+            throw new ResourceNotFoundException("News", "id "+id);
+        }
         newsRepository.deleteById(id);
     }
 
     @Override
     public List<NewsResponseDto> findAll() {
         return newsRepository.findAll().stream()
-                .map(news -> mapToDto(news))
+                .map(news -> newsMapper.toDto(news))
                 .collect(Collectors.toList());
     }
 
     @Override
     public NewsResponseDto findById(Long id) {
         Optional<News> news = newsRepository.findById(id);
-        return mapToDto(news.orElse(null));
-    }
-
-    private NewsResponseDto mapToDto(News news) {
-        return mapper.map(news, NewsResponseDto.class);
+        return newsMapper.toDto(news.orElse(null));
     }
 }
 

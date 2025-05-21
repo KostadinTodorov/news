@@ -1,8 +1,10 @@
 package bg.tuvarna.sit.newsblog.controller;
 
+import bg.tuvarna.sit.newsblog.dto.news.NewsRequestDto;
 import bg.tuvarna.sit.newsblog.dto.news.NewsResponseDto;
 import bg.tuvarna.sit.newsblog.entity.News;
 import bg.tuvarna.sit.newsblog.service.interfaces.NewsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,23 +29,24 @@ public class NewsController {
         return ResponseEntity.ok(newsService.findById(newsid));
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping
-//    public ResponseEntity<NewsResponseDto> createNews(@RequestBody NewsResponseDto dto) {
-//        return ResponseEntity.ok(newsService.create(dto));
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PutMapping("/{id}")
-//    public ResponseEntity<NewsResponseDto> updateNews(@PathVariable Long id, @RequestBody NewsResponseDto dto) {
-//        return ResponseEntity.ok(newsService.update(id, dto));
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
-//        newsService.delete(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/private/insert/category/{categoryId}/news")
+    public ResponseEntity<NewsResponseDto> createNews( @PathVariable Long categoryId,
+                                                       @RequestBody @Valid NewsRequestDto request) {
+        return ResponseEntity.ok(newsService.createNews(categoryId, request));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/private/update/category/news{newsid}")
+    public ResponseEntity<NewsResponseDto> updateNews(@PathVariable Long newsid, @RequestBody @Valid NewsRequestDto request) {
+        return ResponseEntity.ok(newsService.updateNews(newsid, request));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/private/delete/news{newsid}")
+    public ResponseEntity<Void> deleteNews(@PathVariable Long newsid) {
+        newsService.deleteNews(newsid);
+        return ResponseEntity.noContent().build();
+    }
 }
 

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NewsService {
-    News createNews(NewsRequestDto dto, User author);
-    News updateNews(Long id, NewsRequestDto dto);
+    NewsResponseDto createNews(Long categoryId, NewsRequestDto request);
+    NewsResponseDto updateNews(Long newsId, NewsRequestDto request);
     void deleteNews(Long id);
     List<NewsResponseDto> findAll();
     NewsResponseDto findById(Long id);
