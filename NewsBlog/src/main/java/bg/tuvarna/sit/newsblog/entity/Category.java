@@ -26,7 +26,4 @@ public class Category {
     @Size(max = 50)
     @Column(unique = true, nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<News> news = new HashSet<>();
 }

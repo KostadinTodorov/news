@@ -4,15 +4,14 @@ import bg.tuvarna.sit.newsblog.dto.news.NewsRequestDto;
 import bg.tuvarna.sit.newsblog.dto.news.NewsResponseDto;
 import bg.tuvarna.sit.newsblog.entity.Category;
 import bg.tuvarna.sit.newsblog.entity.News;
-import bg.tuvarna.sit.newsblog.entity.User;
 import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.mapper.NewsMapper;
 import bg.tuvarna.sit.newsblog.repository.CategoryRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.service.interfaces.NewsService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,8 +69,20 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsResponseDto> findAll() {
+//        System.out.println("Fetching all news...");
+//        List<News> allNews = newsRepository.findAll();
+//        System.out.println(String.format("Found %d news items", allNews.size()));
+//
+//
+//        List<NewsResponseDto> dtoList = allNews.stream()
+//                .map(newsMapper::toDto)
+//                .collect(Collectors.toList());
+//
+//        System.out.println("Mapped all news to DTOs.");
+//        return dtoList;
+
         return newsRepository.findAll().stream()
-                .map(news -> newsMapper.toDto(news))
+                .map(newsMapper::toDto)
                 .collect(Collectors.toList());
     }
 

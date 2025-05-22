@@ -10,14 +10,21 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CategoryMapper {
 
-    private final CustomMapper mapper;
-
     public CategoryResponseDto toDto(Category category) {
-        return mapper.map(category, CategoryResponseDto.class);
+        if (category == null) return null;
+
+        CategoryResponseDto dto = new CategoryResponseDto();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        return dto;
     }
 
     public Category toEntity(CategoryRequestDto dto) {
-        return mapper.map(dto, Category.class);
+        if (dto == null) return null;
+
+        Category category = new Category();
+        category.setName(dto.getName());
+        return category;
     }
 }
 

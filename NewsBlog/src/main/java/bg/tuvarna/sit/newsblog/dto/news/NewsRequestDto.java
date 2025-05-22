@@ -24,5 +24,5 @@ public class NewsRequestDto {
     private String author;
 
     @NotEmpty
-    private Set<Long> categoryIds;  // IDs of categories
+    private Set<Long> categoryIds;
 }

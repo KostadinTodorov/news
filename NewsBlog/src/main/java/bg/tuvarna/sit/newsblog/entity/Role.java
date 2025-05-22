@@ -26,8 +26,5 @@ public class Role{
     @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
     private RoleName name;
-
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private Set<User> users = new HashSet<>();
 }
 
