@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private final User user;
+
+    public CustomUserDetails(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return user.getId();
