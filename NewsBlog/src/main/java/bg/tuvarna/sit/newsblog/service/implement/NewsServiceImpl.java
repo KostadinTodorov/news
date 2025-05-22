@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
     private final CategoryRepository categoryRepository;
-    private final NewsServiceImpl userRepository;
     private final NewsMapper newsMapper;
 
     @Override

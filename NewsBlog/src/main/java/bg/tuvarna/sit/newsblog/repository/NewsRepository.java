@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
-    List<News> findByCategories_Name(String categoryName);
-    List<News> findByAuthor_Username(String username);
 }
 

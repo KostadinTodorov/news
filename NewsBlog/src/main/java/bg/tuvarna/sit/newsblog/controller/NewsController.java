@@ -30,20 +30,20 @@ public class NewsController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/private/insert/category/{categoryId}/news")
+    @PostMapping("/private/insert/category/news/{categoryId}")
     public ResponseEntity<NewsResponseDto> createNews( @PathVariable Long categoryId,
                                                        @RequestBody @Valid NewsRequestDto request) {
         return ResponseEntity.ok(newsService.createNews(categoryId, request));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/private/update/category/news{newsid}")
+    @PutMapping("/private/update/category/news/{newsid}")
     public ResponseEntity<NewsResponseDto> updateNews(@PathVariable Long newsid, @RequestBody @Valid NewsRequestDto request) {
         return ResponseEntity.ok(newsService.updateNews(newsid, request));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/private/delete/news{newsid}")
+    @DeleteMapping("/private/delete/news/{newsid}")
     public ResponseEntity<Void> deleteNews(@PathVariable Long newsid) {
         newsService.deleteNews(newsid);
         return ResponseEntity.noContent().build();

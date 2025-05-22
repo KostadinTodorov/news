@@ -1,15 +1,15 @@
 package bg.tuvarna.sit.newsblog.service.implement;
 
-import bg.tuvarna.sit.newsblog.dto.auth.JwtAuthResponseDto;
 import bg.tuvarna.sit.newsblog.dto.auth.LoginDto;
 import bg.tuvarna.sit.newsblog.dto.auth.RegisterDto;
 import bg.tuvarna.sit.newsblog.entity.Role;
+import bg.tuvarna.sit.newsblog.entity.RoleName;
 import bg.tuvarna.sit.newsblog.entity.User;
 import bg.tuvarna.sit.newsblog.exception.ResourceNotFoundException;
 import bg.tuvarna.sit.newsblog.mapper.UserMapper;
 import bg.tuvarna.sit.newsblog.repository.RoleRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
-import bg.tuvarna.sit.newsblog.security.JwtService;
+import bg.tuvarna.sit.newsblog.security.JwtTokenProvider;
 import bg.tuvarna.sit.newsblog.service.interfaces.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,11 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
 
@@ -41,10 +40,14 @@ public class AuthServiceImpl implements AuthService {
                         loginDto.getUsername(), loginDto.getPassword())
         );
 
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(()-> new ResourceNotFoundException("User", "name "+loginDto.getUsername()));
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authentication);
 
-        return jwtService.generateToken(user);
+        return jwtTokenProvider.generateToken(authentication);
+
+       /* HttpSession session = req.getSession(true);
+         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+         return "User logged-in successfully!";*/
     }
 
     @Override
@@ -53,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Username already exists");
         }
         else{
-            Role userRole = roleRepository.findByName("COMMENTATOR")
+            Role userRole = roleRepository.findByName(RoleName.valueOf("COMMENTATOR"))
                     .orElseThrow(()-> new ResourceNotFoundException("Role", "COMMENTATOR"));
 
             User user = userMapper.toEntity(registerDto);
@@ -62,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
 
             userRepository.save(user);
 
-            return jwtService.generateToken(user);
+            return "User registered successfully!";
         }
     }
 

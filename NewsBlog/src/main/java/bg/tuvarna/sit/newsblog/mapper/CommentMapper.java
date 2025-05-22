@@ -25,7 +25,7 @@ public class CommentMapper {
 
     public void enrichComment(Comment comment, News news, User user) {
         comment.setNews(news);
-        comment.setAuthor(user);
+        comment.setUser(user);
         comment.setCreatedAt(LocalDateTime.now());
     }
 }

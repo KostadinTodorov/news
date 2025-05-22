@@ -46,7 +46,7 @@ public class News {
     )
     private Set<Category> categories = new HashSet<>();
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 }
 

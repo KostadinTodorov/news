@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment", "id "+id));
 
-        if (!comment.getAuthor().getUsername().equals(userDetails.getUsername())) {
+        if (!comment.getUser().getUsername().equals(userDetails.getUsername())) {
             throw new RuntimeException("You are not allowed to edit this comment");
         }
 

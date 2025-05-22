@@ -23,6 +23,6 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "categories")
     private Set<News> news = new HashSet<>();
 }

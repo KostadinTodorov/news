@@ -41,7 +41,7 @@ public class CommentController {
     }
 
     @PreAuthorize("hasRole('COMMENTATOR')")
-    @PutMapping("/private/update/comment{commentid}")
+    @PutMapping("/private/update/comment/{commentid}")
     public ResponseEntity<CommentResponseDto> update(
             @PathVariable Long commentid,
             @RequestBody CommentRequestDto dto,
