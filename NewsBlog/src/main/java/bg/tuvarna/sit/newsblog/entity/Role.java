@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder
+@Builder
 
 @Entity
 @Table(name = "roles")
@@ -27,7 +27,7 @@ public class Role{
     @Column(unique = true, nullable = false)
     private RoleName name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 }
 
