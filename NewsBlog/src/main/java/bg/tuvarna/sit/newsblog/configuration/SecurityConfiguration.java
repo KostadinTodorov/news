@@ -31,7 +31,7 @@ public class SecurityConfiguration {
             "/api/newsblog/public/**" // all public GET endpoints
     };
 
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService userDetailsService;
 
