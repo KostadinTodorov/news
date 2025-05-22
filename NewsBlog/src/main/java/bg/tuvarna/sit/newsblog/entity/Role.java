@@ -19,7 +19,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority, Serializable {
+public class Role{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -29,12 +29,5 @@ public class Role implements GrantedAuthority, Serializable {
 
     @OneToMany(mappedBy = "role")
     private Set<User> users = new HashSet<>();
-
-
-    @Override
-    public String getAuthority() {
-        return "";
-    }
-
 }
 

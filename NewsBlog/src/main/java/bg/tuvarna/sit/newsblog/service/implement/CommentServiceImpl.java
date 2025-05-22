@@ -11,6 +11,7 @@ import bg.tuvarna.sit.newsblog.mapper.CommentMapper;
 import bg.tuvarna.sit.newsblog.repository.CommentRepository;
 import bg.tuvarna.sit.newsblog.repository.NewsRepository;
 import bg.tuvarna.sit.newsblog.repository.UserRepository;
+import bg.tuvarna.sit.newsblog.security.CustomUserDetails;
 import bg.tuvarna.sit.newsblog.service.interfaces.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,8 +48,10 @@ public class CommentServiceImpl implements CommentService {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(()-> new ResourceNotFoundException("News", "id "+newsId));
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(()-> new ResourceNotFoundException("User", "name "+userDetails.getUsername()));
+//        User user = userRepository.findByUsername(userDetails.getUsername())
+//                .orElseThrow(()-> new ResourceNotFoundException("User", "name "+userDetails.getUsername()));
+
+        User user = ((CustomUserDetails) userDetails).getUser();
 
         Comment comment = commentMapper.toEntity(dto);
         commentMapper.enrichComment(comment, news, user);
@@ -61,7 +64,8 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment", "id "+id));
 
-        if (!comment.getUser().getUsername().equals(userDetails.getUsername())) {
+        User user = ((CustomUserDetails) userDetails).getUser();
+        if (!comment.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("You are not allowed to edit this comment");
         }
 

@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Username already exists");
         }
         else{
-            Role userRole = roleRepository.findByName(RoleName.valueOf("COMMENTATOR"))
+            Role userRole = roleRepository.findByName(RoleName.COMMENTATOR)
                     .orElseThrow(()-> new ResourceNotFoundException("Role", "COMMENTATOR"));
 
             User user = userMapper.toEntity(registerDto);
@@ -65,7 +65,9 @@ public class AuthServiceImpl implements AuthService {
 
             userRepository.save(user);
 
-            return "User registered successfully!";
+            //return "User registered successfully!";
+            return jwtTokenProvider.generateToken(new UsernamePasswordAuthenticationToken(
+                    user.getUsername(), registerDto.getPassword()));
         }
     }
 
