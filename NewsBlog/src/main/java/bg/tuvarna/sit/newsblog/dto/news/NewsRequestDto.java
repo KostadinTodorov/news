@@ -23,6 +23,6 @@ public class NewsRequestDto {
     @NotBlank
     private String author;
 
-    @NotEmpty
-    private Set<Long> categoryIds;
+//    @NotEmpty
+//    private Set<Long> categoryIds;
 }

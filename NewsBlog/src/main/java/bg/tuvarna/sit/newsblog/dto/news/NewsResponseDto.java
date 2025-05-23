@@ -15,8 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsResponseDto {
-    @NotBlank
-    private Long id;
+//    @NotBlank
+//    private Long id;
     @NotBlank
     @Size(min = 10, message = "The topic name needs to be at least 10 symbols")
     private String title;

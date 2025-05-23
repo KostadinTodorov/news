@@ -32,8 +32,6 @@ public class NewsServiceImpl implements NewsService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "id "+categoryId));
 
         News news = newsMapper.toEntity(dto);
-        news.setAuthor(dto.getAuthor());
-        news.setCreatedAt(LocalDateTime.now());
         news.setCategories(Set.of(category));
 
         newsRepository.save(news);
@@ -47,13 +45,14 @@ public class NewsServiceImpl implements NewsService {
                 .orElseThrow(()-> new ResourceNotFoundException("News", "id "+id));
 
 
-        Set<Category> categories = categoryRepository.findAllById(dto.getCategoryIds())
-                .stream().collect(Collectors.toSet());
+//        Set<Category> categories = categoryRepository.findAllById(id)
+//                .stream().collect(Collectors.toSet());
 
-        news.setCategories(categories);
+       // news.setCategories(categories);
+        //newsMapper.toEntity(dto);
         news.setTitle(dto.getTitle());
+        news.setAuthor(dto.getAuthor());
         news.setContent(dto.getContent());
-        news.setLastModifiedAt(LocalDateTime.now());
 
 
         return newsMapper.toDto(newsRepository.save(news));
